@@ -11,6 +11,20 @@ response = urllib.request.urlopen(cssUrl)
 css = response.read()
 
 '''
+Given the two relevant lines in a CSS file, add the targeted
+css classes as keys mapped to the image url path (without the base url)
+'''
+def process_image_lines(images, line1, line2):
+  line1 = line1[:-2] # Remove the ' {'
+  classes = line1.split(', ')
+
+  line2 = line2.split('url("')[1]
+  url = line2.split('"')
+
+  for key in classes:
+    images[key] = url
+
+'''
 Maps css classes to the associated urls found in the css file
 '''
 def generate_image_dictionary():
