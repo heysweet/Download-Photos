@@ -3,9 +3,11 @@ cssUrl = 'http://www.deeplocal.com/assets/style/css/main.css'
 
 # Supports python 2 and 3
 from six.moves import urllib
+from bs4 import BeautifulSoup
 
 response = urllib.request.urlopen(baseUrl)
 html = response.read()
+soup = BeautifulSoup(html, 'html.parser')
 
 response = urllib.request.urlopen(cssUrl)
 css = response.read()
@@ -67,15 +69,30 @@ def list_types(image_types):
 # =============== #
 
 # Retrieve the relevant information about images and which are used
-images = generate_image_dictionary()
-used_classes = retrieve_used_classes()
+divs = [div for div in soup.find_all('div', 
+        attrs = {'class': 'section'}) 
+        if 'news' not in div['class']] # news sections do not contain images
 
-# Empty line before printing found images
-print ''
+images = generate_image_dictionary()
+image_types = dict()
+
+def get_div_image_url(div):
+  return None
 
 image_types = dict()
 for used_class in used_classes:
   if images[used_class]:
     print baseUrl + images[used_class]
+print ''
+num_photos = 0
 
-print '\n' + str(len(used_classes)) + ' images found ' + list_types(image_types)
+for div in divs:
+  url = get_div_image_url(div)
+  if url != None:
+    print baseUrl + url
+    
+    file_type = url.split('.')[-1]
+    add_key_tally(image_types, file_type)
+    num_photos += 1
+
+print '\n' + str(num_photos) + ' images found ' + list_types(image_types)
