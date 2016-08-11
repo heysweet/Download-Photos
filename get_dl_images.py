@@ -51,6 +51,23 @@ def generate_image_dictionary():
   return images
 
 '''
+Given a map of class names to urls (without the base url) and a div,
+this method will find an image on the carousel's display and return
+the url, or None if no image that would be displayed could be found.
+'''
+def get_div_image_url(images, div):
+  # == Print images loaded from the css file == #
+  for used_class in div['class']:
+    if used_class in images:
+      return images[used_class]
+
+  # == Print images loaded from the html file == #
+  if 'text-image' in div['class']:
+    return div.find_all('img')[0]['src']
+
+  return None
+
+'''
 Takes a dictionary representing key and keyCount and returns a formatted
 string representing the number of times each key was tallied
 '''
@@ -88,26 +105,14 @@ divs = [div for div in soup.find_all('div',
 images = generate_image_dictionary()
 image_types = dict()
 
-def get_div_image_url(div):
-  # == Print images loaded from the css file == #
-  for used_class in div['class']:
-    if used_class in images:
-      return images[used_class]
-
-  # == Print images loaded from the html file == #
-  if 'text-image' in div['class']:
-    return div.find_all('img')[0]['src']
-
-  return None
-
 print ''
 num_photos = 0
 
 for div in divs:
-  url = get_div_image_url(div)
+  url = get_div_image_url(images, div)
   if url != None:
     print baseUrl + url
-    
+
     file_type = url.split('.')[-1]
     add_key_tally(image_types, file_type)
     num_photos += 1
