@@ -55,8 +55,16 @@ Takes a dictionary representing key and keyCount and returns a formatted
 string representing the number of times each key was tallied
 '''
 def list_types(image_types):
-  # TODO: Implement
-  return '(type count not implemented)'
+  type_counts = []
+
+  for key in image_types.iterkeys():
+    value = image_types[key]
+    if value is not 1:
+      type_counts.append(str(value) + ' ' + key + 's')
+    else:
+      type_counts.append('1 ' + key)
+
+  return '(' + ', '.join(type_counts) + ')'
 
 '''
 Takes a dictionary and a key and will add one to the value of the key
@@ -81,6 +89,15 @@ images = generate_image_dictionary()
 image_types = dict()
 
 def get_div_image_url(div):
+  # == Print images loaded from the css file == #
+  for used_class in div['class']:
+    if used_class in images:
+      return images[used_class]
+
+  # == Print images loaded from the html file == #
+  if 'text-image' in div['class']:
+    return div.find_all('img')[0]['src']
+
   return None
 
 print ''
