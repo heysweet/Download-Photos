@@ -57,6 +57,17 @@ string representing the number of times each key was tallied
 def list_types(image_types):
   # TODO: Implement
   return '(type count not implemented)'
+
+'''
+Takes a dictionary and a key and will add one to the value of the key
+or start a tally if none exists
+'''
+def add_key_tally(d, key):
+  if key in d:
+    d[key] += 1
+  else:
+    d[key] = 1
+
 # =============== #
 # = Main Script = #
 # =============== #
