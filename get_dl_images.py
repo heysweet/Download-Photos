@@ -51,13 +51,6 @@ def generate_image_dictionary():
   return images
 
 '''
-Looks through the current html setup and determines which classes are used
-'''
-def retrieve_used_classes():
-  # TODO: Implement
-  return []
-
-'''
 Takes a dictionary representing key and keyCount and returns a formatted
 string representing the number of times each key was tallied
 '''
@@ -79,10 +72,6 @@ image_types = dict()
 def get_div_image_url(div):
   return None
 
-image_types = dict()
-for used_class in used_classes:
-  if images[used_class]:
-    print baseUrl + images[used_class]
 print ''
 num_photos = 0
 
