@@ -10,16 +10,26 @@ html = response.read()
 response = urllib.request.urlopen(cssUrl)
 css = response.read()
 
+# ================== #
+# = Helper Methods = #
+# ================== #
+
 '''
 Given the two relevant lines in a CSS file, add the targeted
 css classes as keys mapped to the image url path (without the base url)
 '''
 def process_image_lines(images, line1, line2):
+  #   .class.otherClass.targetClass, .class.otherClass.targetClass2, .class.otherClass.targetClass3 { 
+  line1 = line1.strip()
   line1 = line1[:-2] # Remove the ' {'
   classes = line1.split(', ')
 
+  # Get target class
+  classes = [c.split('.')[-1] for c in classes]
+
+  #   background-image: url("/assets/imgs/projects/food-truck/excited.jpg"); }
   line2 = line2.split('url("')[1]
-  url = line2.split('"')
+  url = line2.split('"')[0]
 
   for key in classes:
     images[key] = url
@@ -30,13 +40,10 @@ Maps css classes to the associated urls found in the css file
 def generate_image_dictionary():
   images = dict()
 
-  def process_image_lines(line1, line2):
-    pass
-
   last_line = ''
   for line in css.split('\n'):
     if 'url("/assets/imgs/' in line:
-      process_image_lines(last_line, line)
+      process_image_lines(images, last_line, line)
     last_line = line
 
   return images
@@ -55,6 +62,9 @@ string representing the number of times each key was tallied
 def list_types(image_types):
   # TODO: Implement
   return '(type count not implemented)'
+# =============== #
+# = Main Script = #
+# =============== #
 
 # Retrieve the relevant information about images and which are used
 images = generate_image_dictionary()
