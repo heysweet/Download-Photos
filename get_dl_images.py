@@ -107,14 +107,17 @@ image_types = dict()
 
 print ''
 num_photos = 0
+urls = []
 
 for div in divs:
   url = get_div_image_url(images, div)
   if url != None:
-    print baseUrl + url
+    urls.append(url)
 
     file_type = url.split('.')[-1]
     add_key_tally(image_types, file_type)
-    num_photos += 1
 
-print '\n' + str(num_photos) + ' images found ' + list_types(image_types)
+for url in sorted(urls):
+  print baseUrl + url
+
+print '\n' + str(len(urls)) + ' images found ' + list_types(image_types)
